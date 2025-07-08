@@ -1,6 +1,6 @@
 # Must Do Actions
 - 항상 `./.project/*.md`를 읽을 것
-- 모든 코드 개발 전에 사용자님과 interactive하게 기능 및 아키텍처 계획을 수립하고 승인을 받을 것. (Before any code development, interactively establish a feature and architecture plan with the user and obtain approval.)
+- `templates/common/AGENTS.md`에 명시된 지침을 따를 것. (Follow the guidelines specified in `templates/common/AGENTS.md`.)
 
 ## Gemini Added Memories
 - 사용자는 저의 답변과 instruction 관련 내용을 출력할 때 항상 '한글(영어)' 형태로 보여주기를 선호합니다.

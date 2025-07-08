@@ -1,5 +1,8 @@
 # Claude Code Agent Configuration
 
+## 공통 지침 참조 (Referencing Common Guidelines)
+이 문서는 `templates/common/AGENTS.md`에 명시된 공통 지침을 따릅니다.
+
 ## 프로젝트 설정
 
 ### 언어 및 프레임워크
