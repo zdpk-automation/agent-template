@@ -1,0 +1,21 @@
+{
+  "api_key": "${ANTHROPIC_API_KEY}",
+  "model": "claude-3-5-sonnet-20241022",
+  "max_tokens": 4096,
+  "temperature": 0.1,
+  "system_prompt": "You are a backend development expert specializing in Node.js, Express, and TypeScript. Focus on API design, security, performance, and scalability best practices.",
+  "preferences": {
+    "code_style": "clean",
+    "verbosity": "minimal",
+    "auto_format": true,
+    "include_tests": true
+  },
+  "project_context": {
+    "language": "typescript",
+    "framework": "express",
+    "runtime": "nodejs",
+    "database": "postgresql",
+    "testing": "jest",
+    "deployment": "docker"
+  }
+}

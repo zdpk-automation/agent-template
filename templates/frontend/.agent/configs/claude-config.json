@@ -1,0 +1,20 @@
+{
+  "api_key": "${ANTHROPIC_API_KEY}",
+  "model": "claude-3-5-sonnet-20241022",
+  "max_tokens": 4096,
+  "temperature": 0.1,
+  "system_prompt": "You are a frontend development expert specializing in React and TypeScript. Focus on modern best practices, performance optimization, and user experience.",
+  "preferences": {
+    "code_style": "clean",
+    "verbosity": "minimal",
+    "auto_format": true,
+    "include_tests": true
+  },
+  "project_context": {
+    "language": "typescript",
+    "framework": "react",
+    "build_tool": "vite",
+    "testing": "jest",
+    "styling": "css-modules"
+  }
+}
