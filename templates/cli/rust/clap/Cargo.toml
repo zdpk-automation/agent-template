@@ -1,0 +1,9 @@
+# templates/cli/rust/clap/Cargo.toml
+
+[package]
+name = "{{project_name | kebab_case}}"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.0", features = ["derive"] }
