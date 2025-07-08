@@ -15,6 +15,7 @@
 *   **Backend**: Axum (Rust), NestJS (TS), FastAPI (Python)
 *   **Frontend**: Next.js (TS), Flutter (Dart)
 *   **Infrastructure**: Terraform (GCP, AWS)
+*   **CLI**: Typer (Python), Clap (Rust)
 
 ### 추가 사용 사례 (Additional Use Cases)
 *   Social platform scripts
@@ -25,8 +26,8 @@
 ## 3. 기능 (Features)
 
 ### `init` (초기화)
-*   **다양한 템플릿 유형 지원**: 코드 프로젝트(백엔드, 프론트엔드, 인프라), 스크립트, 문서(블로그, 기록) 등 다양한 유형의 템플릿을 기반으로 새 항목을 생성합니다.
-*   **세분화된 템플릿 선택**: 언어, 프레임워크, 콘텐츠 유형(예: `backend/python/fastapi`, `doc/obsidian/blog-post`)을 조합하여 템플릿을 선택할 수 있도록 지원합니다.
+*   **다양한 템플릿 유형 지원**: 코드 프로젝트(백엔드, 프론트엔드, 인프라, **CLI**), 스크립트, 문서(블로그, 기록) 등 다양한 유형의 템플릿을 기반으로 새 항목을 생성합니다.
+*   **세분화된 템플릿 선택**: 언어, 프레임워크, 콘텐츠 유형(예: `backend/python/fastapi`, `doc/obsidian/blog-post`, `cli/python/typer`)을 조합하여 템플릿을 선택할 수 있도록 지원합니다.
 *   특정 템플릿 버전을 선택할 수 있도록 지원합니다 (Git 태그 활용).
 *   프로젝트/항목 이름, 경로, 작성자 등 사용자 입력을 받습니다.
 *   템플릿 파일 복사 및 플레이스홀더(placeholder) 치환 기능을 포함합니다.
@@ -54,7 +55,7 @@ cli/
 *   **CLI 프레임워크 (CLI Framework):** `Typer` (또는 `Click`) 라이브러리를 사용하여 명령줄 인자 파싱, 하위 명령 정의, 도움말 생성 등을 처리합니다.
 *   **`template_manager.py`:**
     *   `agent-template` 저장소를 로컬에 클론하거나 업데이트하는 기능을 담당합니다.
-    *   사용 가능한 템플릿 디렉토리(예: `templates/backend/python/fastapi`, `templates/doc/obsidian/blog-post`)를 식별합니다.
+    *   사용 가능한 템플릿 디렉토리(예: `templates/backend/python/fastapi`, `templates/doc/obsidian/blog-post`, `templates/cli/python/typer`)를 식별합니다.
     *   Git 태그를 사용하여 템플릿의 버전을 관리하고, 특정 버전의 템플릿을 체크아웃하는 기능을 제공합니다.
 *   **`project_generator.py`:**
     *   선택된 템플릿 디렉토리의 내용을 새 프로젝트/콘텐츠 경로로 복사합니다.
