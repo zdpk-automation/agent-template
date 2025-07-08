@@ -1,4 +1,4 @@
-# Backend Project AI Configuration
+# TEMPLATE INSTRUCTIONS (BACKEND)
 
 ## 프로젝트 개요 / Project Overview
 - **타입 / Type**: Backend API Server
@@ -24,14 +24,6 @@ npm run format       # 코드 포맷팅 / Code formatting
 - **버전 관리 / Versioning**: /api/v1/ 형태로 버전 관리 / Version management with /api/v1/
 - **에러 처리 / Error Handling**: 일관된 에러 응답 형식 / Consistent error response format
 - **보안 / Security**: Helmet, CORS, Rate limiting 적용 / Apply Helmet, CORS, Rate limiting
-
-## AI 도구 사용 가이드 / AI Tools Usage Guide
-
-### Claude Code 활용 / Claude Code Usage
-- API 엔드포인트 설계 및 구현 / API endpoint design and implementation
-- 데이터베이스 스키마 설계 / Database schema design
-- 미들웨어 및 인증 로직 / Middleware and authentication logic
-- 에러 처리 및 로깅 / Error handling and logging
 
 ### 프로젝트 구조 / Project Structure
 ```

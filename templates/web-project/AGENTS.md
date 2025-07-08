@@ -1,4 +1,4 @@
-# Web Project AI Configuration
+# TEMPLATE INSTRUCTIONS (WEB PROJECT)
 
 ## 프로젝트 개요
 - **타입**: 웹 애플리케이션
@@ -25,26 +25,6 @@ npm run typecheck    # 타입 체크
 - **네이밍**: camelCase for variables, PascalCase for components
 - **파일명**: kebab-case for files, PascalCase for components
 
-## AI 도구 사용 가이드
-
-### Claude Code 활용
-- 컴포넌트 설계 및 구현
-- 코드 리뷰 및 리팩토링
-- 타입스크립트 타입 정의
-- 테스트 코드 작성
-
-### Gemini CLI 활용
-- UI/UX 개선 제안
-- 접근성 검토
-- 성능 최적화
-- 다국어 지원
-
-### OpenCode 활용
-- 실시간 코딩 지원
-- 자동 완성 및 제안
-- 코드 포맷팅
-- 실시간 오류 검출
-
 ## 프로젝트 구조
 ```
 src/
@@ -62,3 +42,9 @@ src/
 - **타입스크립트**: strict mode 활성화
 - **접근성**: WCAG 2.1 AA 준수
 - **성능**: Lighthouse 점수 90+ 목표
+
+## 보안 고려사항
+- **환경 변수**: 민감한 정보는 .env 파일로 관리
+- **XSS 방지**: React의 자동 이스케이프 기능 활용
+- **CSRF 방지**: 서버 측에서 토큰 기반 방어
+- **의존성 관리**: `npm audit`을 통한 취약점 점검

@@ -1,4 +1,4 @@
-# Frontend Project AI Configuration
+# TEMPLATE INSTRUCTIONS (FRONTEND)
 
 ## 프로젝트 개요 / Project Overview
 - **타입 / Type**: Frontend Web Application
@@ -24,14 +24,6 @@ npm run format       # 코드 포맷팅 / Code formatting
 - **세미콜론 / Semicolons**: 항상 사용 / Always use
 - **네이밍 / Naming**: camelCase for variables, PascalCase for components
 - **파일명 / File naming**: kebab-case for files, PascalCase for components
-
-## AI 도구 사용 가이드 / AI Tools Usage Guide
-
-### Claude Code 활용 / Claude Code Usage
-- 컴포넌트 설계 및 구현 / Component design and implementation
-- React 훅 최적화 / React hooks optimization
-- 타입스크립트 타입 정의 / TypeScript type definitions
-- 성능 최적화 제안 / Performance optimization suggestions
 
 ### 프로젝트 구조 / Project Structure
 ```
