@@ -10,16 +10,19 @@
 - **목적이 명확해야 함**: 무엇을, 왜 변경했는지 분명히 설명
 - **간결하면서도 충분한 정보 제공**: 불필요한 내용은 제외하되 필요한 정보는 누락하지 않음
 - **기술적 배경이 다른 사람도 이해할 수 있도록 작성**
+- **코드블록 활용**: 중요한 변경사항은 코드블록으로 시각화
 
 ### 2. 구조화 (Structure)
 - **일관된 템플릿 사용**: 프로젝트별 표준 템플릿 활용
 - **논리적 순서**: 문제 → 해결방법 → 결과 순으로 설명
 - **시각적 구분**: 섹션별로 명확히 구분
+- **다국어 지원**: 글로벌 팀을 위한 영어/한국어 병기
 
 ### 3. 완전성 (Completeness)
 - **테스트 계획 포함**: 어떻게 검증할 것인지 명시
 - **영향 범위 설명**: 변경이 미치는 영향 분석
 - **후속 작업 언급**: 필요한 경우 추가 작업 계획
+- **핵심 코드 하이라이트**: 리뷰어가 집중해야 할 부분 강조
 
 ## PR 제목 작성법
 
@@ -143,12 +146,134 @@ UI 변경이 있는 경우:
 2. **단계별 분할**: 준비 → 구현 → 테스트 → 문서화
 3. **파일별 분할**: 관련 없는 파일 변경은 분리
 
+## 코드블록 활용 가이드
+
+### 중요 변경사항 하이라이트
+코드블록을 사용하여 핵심 변경사항을 시각적으로 강조하세요:
+
+#### API 변경사항
+```typescript
+// Before
+function getUserData(id: string): User | null
+
+// After  
+function getUserData(id: string): Promise<User | null>
+```
+
+#### 설정 파일 변경
+```yaml
+# New configuration added
+database:
+  connection_pool:
+    min_size: 5
+    max_size: 20
+    timeout: 30s
+```
+
+#### 중요한 로직 변경
+```javascript
+// Critical: Changed authentication flow
+const authenticateUser = async (token) => {
+  // Added token validation
+  if (!isValidToken(token)) {
+    throw new AuthenticationError('Invalid token');
+  }
+  
+  return await verifyUserPermissions(token);
+};
+```
+
+### 파일 구조 변경
+```
+src/
+├── components/
+│   ├── auth/           # 🆕 New authentication components
+│   │   ├── LoginForm.tsx
+│   │   └── AuthProvider.tsx
+│   └── common/
+└── utils/
+    └── auth.ts         # 🔄 Refactored authentication utilities
+```
+
+### 명령어 및 스크립트
+```bash
+# Installation commands
+npm install @auth/core @auth/jwt
+
+# New npm scripts added
+npm run test:auth
+npm run build:production
+```
+
+## 다국어 지원 가이드 (Bilingual Support)
+
+### 기본 원칙
+글로벌 팀 협업을 위해 중요한 내용은 영어와 한국어를 병기합니다.
+
+### 제목 작성 (Title Writing)
+```
+feat: Add user authentication system / 사용자 인증 시스템 추가
+fix: Resolve database connection issue / 데이터베이스 연결 문제 해결
+```
+
+### 섹션별 다국어 적용
+
+#### Summary 섹션
+```markdown
+## Summary / 요약
+• Add JWT-based authentication system / JWT 기반 인증 시스템 추가
+• Implement role-based access control / 역할 기반 접근 제어 구현
+• Update API documentation / API 문서 업데이트
+```
+
+#### Problem/Motivation 섹션
+```markdown
+## Problem/Motivation / 문제 및 동기
+
+**English:**
+Current authentication system lacks proper security measures and doesn't support role-based permissions.
+
+**한국어:**
+현재 인증 시스템은 적절한 보안 조치가 부족하고 역할 기반 권한을 지원하지 않습니다.
+```
+
+#### 간소화된 병기 방식
+```markdown
+## Solution / 해결방법
+
+Implemented JWT-based authentication with role management.
+JWT 기반 인증과 역할 관리를 구현했습니다.
+
+### Key Changes / 주요 변경사항
+- Added AuthProvider component / AuthProvider 컴포넌트 추가
+- Implemented token validation / 토큰 검증 구현
+- Created role-based routing / 역할 기반 라우팅 생성
+```
+
+### 코드 주석 다국어화
+```typescript
+/**
+ * Validates user authentication token
+ * 사용자 인증 토큰을 검증합니다
+ */
+export const validateToken = (token: string): boolean => {
+  // Check token format / 토큰 형식 확인
+  if (!token || token.length < 10) {
+    return false;
+  }
+  
+  // Verify token signature / 토큰 서명 검증
+  return jwt.verify(token, process.env.JWT_SECRET);
+};
+```
+
 ## 코드 리뷰 고려사항
 
 ### 리뷰어를 위한 배려
 - **변경 이유 설명**: 코드만 보고 이해하기 어려운 부분은 주석으로 설명
-- **핵심 변경사항 하이라이트**: 특히 주의 깊게 봐야 할 부분 명시
+- **핵심 변경사항 하이라이트**: 코드블록으로 중요 부분 강조
 - **테스트 방법 제공**: 로컬에서 테스트할 수 있는 방법 안내
+- **다국어 설명**: 글로벌 팀원을 위한 영어 설명 포함
 
 ### 자가 검토 체크리스트
 - [ ] 코드 스타일 가이드 준수
@@ -156,6 +281,8 @@ UI 변경이 있는 경우:
 - [ ] 문서 업데이트 (필요한 경우)
 - [ ] 보안 취약점 검토
 - [ ] 성능 영향 분석
+- [ ] 중요 변경사항 코드블록으로 표시
+- [ ] 글로벌 팀을 위한 영어 설명 포함
 
 ## 특수 상황별 가이드
 
@@ -249,67 +376,115 @@ UI 변경이 있는 경우:
 
 ## 예시 템플릿
 
-### 기본 템플릿
+### 기본 템플릿 (Basic Template)
 ```markdown
-## Summary
+## Summary / 요약
+• 
+• 
 • 
 
-## Problem
+## Problem/Motivation / 문제 및 동기
 
 
-## Solution
+## Solution / 해결방법
 
 
-## Test Plan
-- [ ] 
-- [ ] 
-- [ ] 
-
-## Checklist
-- [ ] 코드 리뷰 완료
-- [ ] 테스트 통과
-- [ ] 문서 업데이트 (필요한 경우)
+## Key Changes / 주요 변경사항
+```typescript
+// Example of important code change
+const newFunction = () => {
+  // Implementation details
+};
 ```
 
-### 상세 템플릿
+## Test Plan / 테스트 계획
+- [ ] Unit tests added/updated / 단위 테스트 추가/수정
+- [ ] Integration tests passed / 통합 테스트 통과
+- [ ] Manual testing completed / 수동 테스트 완료
+
+## Checklist / 체크리스트
+- [ ] Code style guide compliance / 코드 스타일 가이드 준수
+- [ ] Test coverage verified / 테스트 커버리지 확인
+- [ ] Documentation updated / 문서 업데이트 (필요한 경우)
+- [ ] Important changes highlighted with code blocks / 중요 변경사항 코드블록으로 표시
+```
+
+### 상세 템플릿 (Detailed Template)
 ```markdown
-## Summary
+## Summary / 요약
 • 
 • 
 • 
 
-## Problem/Motivation
+## Problem/Motivation / 문제 및 동기
+
+**English:**
 
 
-## Solution
+**한국어:**
 
 
-## Test Plan
-- [ ] 단위 테스트 추가/수정
-- [ ] 통합 테스트 실행
-- [ ] 수동 테스트 완료
-- [ ] 성능 테스트 (필요한 경우)
+## Solution / 해결방법
 
-## Breaking Changes
-⚠️ 없음 / 다음 변경사항들:
+**Implementation Details:**
+```typescript
+// Key implementation example
+interface NewFeature {
+  id: string;
+  name: string;
+  enabled: boolean;
+}
+```
+
+**주요 구현 내용:**
 
 
-## Screenshots
-<!-- UI 변경이 있는 경우 Before/After 스크린샷 -->
+## Test Plan / 테스트 계획
+- [ ] Unit tests added/updated / 단위 테스트 추가/수정
+- [ ] Integration tests executed / 통합 테스트 실행
+- [ ] Manual testing completed / 수동 테스트 완료
+- [ ] Performance testing (if needed) / 성능 테스트 (필요한 경우)
 
-## Performance Impact
-<!-- 성능에 영향을 주는 경우 벤치마크 결과 -->
+## Breaking Changes / 호환성 변경
+⚠️ None / 없음
 
-## Dependencies
-<!-- 새로운 의존성이나 버전 업데이트가 있는 경우 -->
+**If any breaking changes:**
+```typescript
+// Before
+oldFunction(param: string): void
 
-## Additional Notes
-<!-- 기타 리뷰어가 알아야 할 정보 -->
+// After  
+newFunction(param: string, options?: Options): Promise<void>
+```
 
-## Checklist
-- [ ] 코드 스타일 가이드 준수
-- [ ] 테스트 커버리지 확인
-- [ ] 문서 업데이트 (필요한 경우)
-- [ ] 보안 취약점 검토
-- [ ] 성능 영향 분석
+## Key Code Changes / 핵심 코드 변경사항
+```diff
+- const oldImplementation = () => { ... }
++ const newImplementation = () => { ... }
+```
+
+## Screenshots / 스크린샷
+<!-- UI changes: Before/After screenshots -->
+<!-- UI 변경사항: Before/After 스크린샷 -->
+
+## Performance Impact / 성능 영향
+<!-- Benchmark results if performance-related -->
+<!-- 성능 관련 변경 시 벤치마크 결과 -->
+
+## Dependencies / 의존성
+<!-- New dependencies or version updates -->
+<!-- 새로운 의존성이나 버전 업데이트 -->
+
+## Additional Notes / 추가 정보
+<!-- Other information reviewers should know -->
+<!-- 리뷰어가 알아야 할 기타 정보 -->
+
+## Checklist / 체크리스트
+- [ ] Code style guide compliance / 코드 스타일 가이드 준수
+- [ ] Test coverage verified / 테스트 커버리지 확인
+- [ ] Documentation updated / 문서 업데이트 (필요한 경우)
+- [ ] Security review completed / 보안 검토 완료
+- [ ] Performance impact analyzed / 성능 영향 분석
+- [ ] Key changes highlighted with code blocks / 핵심 변경사항 코드블록으로 표시
+- [ ] Bilingual descriptions provided / 다국어 설명 제공
 ```

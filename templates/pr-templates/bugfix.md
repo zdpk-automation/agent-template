@@ -1,28 +1,52 @@
-## Summary
+## Summary / 요약
 <!-- 수정된 버그의 핵심 내용을 간결하게 요약 -->
+<!-- Briefly summarize the core content of the fixed bug -->
 • 
 • 
 
-## Bug Description
+## Bug Description / 버그 설명
 <!-- 버그의 구체적인 증상과 재현 방법 -->
-### Symptoms
+<!-- Specific symptoms and reproduction steps of the bug -->
+
+### Symptoms / 증상
 - 
 
-### Steps to Reproduce
+### Steps to Reproduce / 재현 단계
 1. 
 2. 
 3. 
 
-### Expected vs Actual Behavior
-- **Expected**: 
-- **Actual**: 
+### Expected vs Actual Behavior / 예상 vs 실제 동작
+- **Expected / 예상**: 
+- **Actual / 실제**: 
 
-## Root Cause
+## Root Cause / 근본 원인
 <!-- 버그의 근본 원인 분석 -->
+<!-- Root cause analysis of the bug -->
 
+```typescript
+// Problematic code that caused the issue
+const problematicFunction = () => {
+  // Issue was here
+};
+```
 
-## Solution
+## Solution / 해결방법
 <!-- 버그를 어떻게 수정했는지 설명 -->
+<!-- Explain how you fixed the bug -->
+
+### Code Changes / 코드 변경사항
+```typescript
+// Fixed implementation
+const fixedFunction = () => {
+  // Proper implementation
+  if (condition) {
+    // Added proper validation
+    return validResult;
+  }
+  throw new Error('Invalid input');
+};
+```
 
 
 ## Test Plan

@@ -1,19 +1,45 @@
-## Summary
+## Summary / 요약
 <!-- 새로운 기능의 핵심 내용을 3-5개 불릿 포인트로 요약 -->
+<!-- Summarize the new feature in 3-5 bullet points -->
 • 
 • 
 • 
 
-## Problem/Motivation
+## Problem/Motivation / 문제 및 동기
 <!-- 이 기능이 왜 필요한지, 어떤 사용자 문제를 해결하는지 설명 -->
+<!-- Explain why this feature is needed and what user problem it solves -->
+
+**English:**
 
 
-## Solution
+**한국어:**
+
+
+## Solution / 해결방법
 <!-- 기능을 어떻게 구현했는지, 주요 설계 결정사항 설명 -->
+<!-- Explain how you implemented the feature and key design decisions -->
 
+### Implementation Details / 구현 세부사항
+```typescript
+// Key interfaces or types added
+interface NewFeature {
+  id: string;
+  name: string;
+  config: FeatureConfig;
+}
+```
 
-## User Experience
+### API Changes / API 변경사항
+```typescript
+// New endpoints or methods
+export const createFeature = async (data: CreateFeatureRequest): Promise<Feature> => {
+  // Implementation
+};
+```
+
+## User Experience / 사용자 경험
 <!-- 사용자 관점에서 어떻게 동작하는지 설명 -->
+<!-- Describe how it works from the user's perspective -->
 
 
 ## Test Plan
