@@ -1,5 +1,6 @@
 # Must Do Actions
 - 항상 `./.project/*.md`를 읽을 것
+- `templates/common/AGENTS.md`에 명시된 지침을 따를 것. (Follow the guidelines specified in `templates/common/AGENTS.md`.)
 
 ## Gemini Added Memories
 - 사용자는 저의 답변과 instruction 관련 내용을 출력할 때 항상 '한글(영어)' 형태로 보여주기를 선호합니다.
