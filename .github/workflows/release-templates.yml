@@ -1,0 +1,80 @@
+name: Release Templates
+
+on:
+  push:
+    tags:
+      - 'v*'
+      - '!cli-v*'  # Exclude CLI releases
+
+jobs:
+  release:
+    name: Create Template Release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Get tag name
+      id: tag_name
+      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+    - name: Get version
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+    - name: Update config.yaml with new version
+      run: |
+        # Update all template versions in config.yaml
+        sed -i 's/version: "v[0-9]\+\.[0-9]\+\.[0-9]\+"/version: "${{ steps.version.outputs.VERSION }}"/g' config.yaml
+        
+        # Commit the updated config
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add config.yaml
+        git commit -m "Update template versions to ${{ steps.version.outputs.VERSION }}" || exit 0
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+        echo "## Templates ${{ steps.version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "### Updated Templates" >> $GITHUB_OUTPUT
+        echo "- **Frontend**: React + TypeScript + Vite template" >> $GITHUB_OUTPUT
+        echo "- **Backend**: Node.js + Express + TypeScript template" >> $GITHUB_OUTPUT
+        echo "- **Mobile**: React Native template (coming soon)" >> $GITHUB_OUTPUT
+        echo "- **Fullstack**: Combined frontend + backend template (coming soon)" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "### AI Agent Configuration" >> $GITHUB_OUTPUT
+        echo "- Claude Code configuration optimized for each template type" >> $GITHUB_OUTPUT
+        echo "- Project-specific AGENTS.md files" >> $GITHUB_OUTPUT
+        echo "- Separated AI configuration from project code" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "### Usage" >> $GITHUB_OUTPUT
+        echo "\`\`\`bash" >> $GITHUB_OUTPUT
+        echo "# Install/update CLI first" >> $GITHUB_OUTPUT
+        echo "curl -sSL https://github.com/zdpk-automation/agent-template/releases/latest/download/install.sh | bash" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "# Use templates" >> $GITHUB_OUTPUT
+        echo "agent init --frontend    # Uses this version" >> $GITHUB_OUTPUT
+        echo "agent init --backend     # Uses this version" >> $GITHUB_OUTPUT
+        echo "agent upgrade --frontend # Upgrade to this version" >> $GITHUB_OUTPUT
+        echo "\`\`\`" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag_name.outputs.TAG_NAME }}
+        release_name: Templates ${{ steps.version.outputs.VERSION }}
+        body: ${{ steps.changelog.outputs.CHANGELOG }}
+        draft: false
+        prerelease: false
+
+    - name: Push updated config
+      run: |
+        git push origin HEAD:main || echo "No changes to push"

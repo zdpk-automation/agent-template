@@ -1,0 +1,142 @@
+name: Release CLI
+
+on:
+  push:
+    tags:
+      - 'cli-v*'
+
+jobs:
+  release:
+    name: Create CLI Release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Get tag name
+      id: tag_name
+      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+    - name: Get version
+      id: version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/cli-v}" >> $GITHUB_OUTPUT
+
+    - name: Create CLI archive
+      run: |
+        mkdir -p release
+        cp cli/agent release/
+        chmod +x release/agent
+        
+        # Create archives for different platforms
+        tar -czf agent-cli-${{ steps.version.outputs.VERSION }}-linux.tar.gz -C release agent
+        zip agent-cli-${{ steps.version.outputs.VERSION }}-windows.zip -j release/agent
+        
+        # Create install script
+        cat > install.sh << 'EOF'
+        #!/bin/bash
+        set -e
+        
+        # Detect OS
+        OS="$(uname -s)"
+        case "${OS}" in
+            Linux*)     PLATFORM=linux;;
+            Darwin*)    PLATFORM=linux;;  # Use linux binary for macOS
+            CYGWIN*)    PLATFORM=windows;;
+            MINGW*)     PLATFORM=windows;;
+            *)          echo "Unsupported OS: ${OS}"; exit 1;;
+        esac
+        
+        VERSION="${{ steps.version.outputs.VERSION }}"
+        
+        if [ "$PLATFORM" = "windows" ]; then
+            ARCHIVE="agent-cli-${VERSION}-windows.zip"
+            curl -L "https://github.com/zdpk-automation/agent-template/releases/download/cli-v${VERSION}/${ARCHIVE}" -o agent-cli.zip
+            unzip agent-cli.zip
+            rm agent-cli.zip
+            echo "Agent CLI installed. Move 'agent' to a directory in your PATH."
+        else
+            ARCHIVE="agent-cli-${VERSION}-linux.tar.gz"
+            curl -L "https://github.com/zdpk-automation/agent-template/releases/download/cli-v${VERSION}/${ARCHIVE}" | tar xz
+            chmod +x agent
+            
+            # Try to install to /usr/local/bin
+            if [ -w "/usr/local/bin" ]; then
+                mv agent /usr/local/bin/
+                echo "Agent CLI installed to /usr/local/bin/agent"
+            else
+                echo "Agent CLI downloaded. Run 'sudo mv agent /usr/local/bin/' to install globally."
+            fi
+        fi
+        
+        echo "Installation complete! Run 'agent --help' to get started."
+        EOF
+        
+        chmod +x install.sh
+
+    - name: Generate changelog
+      id: changelog
+      run: |
+        echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+        echo "## Agent CLI v${{ steps.version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "### Features" >> $GITHUB_OUTPUT
+        echo "- Simple template management for frontend/backend projects" >> $GITHUB_OUTPUT
+        echo "- Version-controlled template downloads" >> $GITHUB_OUTPUT
+        echo "- AI agent configuration separation" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "### Installation" >> $GITHUB_OUTPUT
+        echo "\`\`\`bash" >> $GITHUB_OUTPUT
+        echo "curl -sSL https://github.com/zdpk-automation/agent-template/releases/download/cli-v${{ steps.version.outputs.VERSION }}/install.sh | bash" >> $GITHUB_OUTPUT
+        echo "\`\`\`" >> $GITHUB_OUTPUT
+        echo "" >> $GITHUB_OUTPUT
+        echo "### Usage" >> $GITHUB_OUTPUT
+        echo "\`\`\`bash" >> $GITHUB_OUTPUT
+        echo "agent init --frontend    # Initialize frontend project" >> $GITHUB_OUTPUT
+        echo "agent init --backend     # Initialize backend project" >> $GITHUB_OUTPUT
+        echo "agent upgrade --frontend # Upgrade frontend template" >> $GITHUB_OUTPUT
+        echo "agent list               # List available templates" >> $GITHUB_OUTPUT
+        echo "\`\`\`" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag_name.outputs.TAG_NAME }}
+        release_name: Agent CLI ${{ steps.version.outputs.VERSION }}
+        body: ${{ steps.changelog.outputs.CHANGELOG }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Linux Archive
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./agent-cli-${{ steps.version.outputs.VERSION }}-linux.tar.gz
+        asset_name: agent-cli-${{ steps.version.outputs.VERSION }}-linux.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Upload Windows Archive
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./agent-cli-${{ steps.version.outputs.VERSION }}-windows.zip
+        asset_name: agent-cli-${{ steps.version.outputs.VERSION }}-windows.zip
+        asset_content_type: application/zip
+
+    - name: Upload Install Script
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./install.sh
+        asset_name: install.sh
+        asset_content_type: text/plain

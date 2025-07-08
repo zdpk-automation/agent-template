@@ -1,0 +1,283 @@
+#!/bin/bash
+
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m'
+
+# Configuration
+REPO_URL="https://github.com/zdpk-automation/agent-template"
+CONFIG_URL="$REPO_URL/raw/main/config.yaml"
+VERSION="1.0.0"
+
+# Default paths
+AGENT_DIR="$HOME/.agent"
+CONFIG_FILE="$AGENT_DIR/config.yaml"
+TEMPLATES_DIR="$AGENT_DIR/templates"
+
+# Help function
+show_help() {
+    cat << EOF
+Agent CLI - Simple Template Manager
+
+Usage: agent <command> [options]
+
+Commands:
+    init --frontend         Initialize frontend project template
+    init --backend          Initialize backend project template  
+    init --mobile           Initialize mobile project template
+    init --fullstack        Initialize fullstack project template
+    
+    upgrade --frontend      Upgrade frontend template to latest version
+    upgrade --backend       Upgrade backend template to latest version
+    upgrade --mobile        Upgrade mobile template to latest version
+    upgrade --fullstack     Upgrade fullstack template to latest version
+    
+    list                    List available templates and versions
+    version                 Show CLI version
+    help                    Show this help message
+
+Examples:
+    agent init --frontend
+    agent upgrade --backend
+    agent list
+
+EOF
+}
+
+# Logging functions
+log_info() {
+    echo -e "${BLUE}ℹ${NC} $1"
+}
+
+log_success() {
+    echo -e "${GREEN}✓${NC} $1"
+}
+
+log_warning() {
+    echo -e "${YELLOW}⚠${NC} $1"
+}
+
+log_error() {
+    echo -e "${RED}✗${NC} $1"
+}
+
+# Create agent directory
+ensure_agent_dir() {
+    if [ ! -d "$AGENT_DIR" ]; then
+        mkdir -p "$AGENT_DIR"
+        log_info "Created agent directory: $AGENT_DIR"
+    fi
+}
+
+# Download and parse config
+download_config() {
+    log_info "Downloading latest configuration..."
+    
+    if command -v curl >/dev/null 2>&1; then
+        curl -sSL "$CONFIG_URL" -o "$CONFIG_FILE"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -q "$CONFIG_URL" -O "$CONFIG_FILE"
+    else
+        log_error "Neither curl nor wget found. Please install one of them."
+        exit 1
+    fi
+    
+    if [ ! -f "$CONFIG_FILE" ]; then
+        log_error "Failed to download configuration file"
+        exit 1
+    fi
+    
+    log_success "Configuration downloaded"
+}
+
+# Get template version from config
+get_template_version() {
+    local template_type="$1"
+    
+    if [ ! -f "$CONFIG_FILE" ]; then
+        download_config
+    fi
+    
+    # Simple YAML parsing (assumes specific format)
+    grep -A 2 "^  $template_type:" "$CONFIG_FILE" | grep "version:" | sed 's/.*version: *"\([^"]*\)".*/\1/'
+}
+
+# Download template
+download_template() {
+    local template_type="$1"
+    local target_dir="${2:-.}"
+    local version
+    
+    version=$(get_template_version "$template_type")
+    
+    if [ -z "$version" ]; then
+        log_error "Template '$template_type' not found in configuration"
+        exit 1
+    fi
+    
+    log_info "Downloading $template_type template (version: $version)..."
+    
+    local template_url="$REPO_URL/archive/refs/tags/$version.tar.gz"
+    local temp_dir
+    temp_dir=$(mktemp -d)
+    
+    # Download and extract
+    if command -v curl >/dev/null 2>&1; then
+        curl -sSL "$template_url" | tar -xz -C "$temp_dir" --strip-components=1
+    elif command -v wget >/dev/null 2>&1; then
+        wget -q "$template_url" -O - | tar -xz -C "$temp_dir" --strip-components=1
+    else
+        log_error "Neither curl nor wget found"
+        exit 1
+    fi
+    
+    # Copy template files
+    local template_source="$temp_dir/templates/$template_type"
+    
+    if [ ! -d "$template_source" ]; then
+        log_error "Template directory not found: templates/$template_type"
+        rm -rf "$temp_dir"
+        exit 1
+    fi
+    
+    # Copy files (excluding .agent directory to avoid conflicts)
+    log_info "Copying template files to $target_dir..."
+    
+    find "$template_source" -type f | while read -r file; do
+        relative_path="${file#$template_source/}"
+        
+        # Skip .agent directory files
+        if [[ "$relative_path" == .agent/* ]]; then
+            continue
+        fi
+        
+        target_file="$target_dir/$relative_path"
+        target_file_dir=$(dirname "$target_file")
+        
+        mkdir -p "$target_file_dir"
+        cp "$file" "$target_file"
+    done
+    
+    # Copy AI agent configuration separately to .agent directory
+    local agent_config_source="$template_source/.agent"
+    if [ -d "$agent_config_source" ]; then
+        log_info "Setting up AI agent configuration..."
+        mkdir -p "$target_dir/.agent"
+        cp -r "$agent_config_source"/* "$target_dir/.agent/"
+    fi
+    
+    # Cleanup
+    rm -rf "$temp_dir"
+    
+    log_success "$template_type template initialized successfully!"
+    log_info "AI agent configuration saved to .agent/ directory"
+}
+
+# List available templates
+list_templates() {
+    if [ ! -f "$CONFIG_FILE" ]; then
+        download_config
+    fi
+    
+    echo -e "${BLUE}Available Templates:${NC}"
+    echo "===================="
+    
+    # Parse YAML and show templates
+    grep -E "^  [a-z]+:" "$CONFIG_FILE" | while read -r line; do
+        template_name=$(echo "$line" | sed 's/://g' | xargs)
+        version=$(get_template_version "$template_name")
+        echo -e "${GREEN}$template_name${NC}: $version"
+    done
+}
+
+# Upgrade template
+upgrade_template() {
+    local template_type="$1"
+    local current_dir="."
+    
+    if [ ! -d ".agent" ]; then
+        log_error "No .agent directory found. This doesn't appear to be an initialized project."
+        exit 1
+    fi
+    
+    log_warning "This will overwrite existing template files. Continue? (y/N)"
+    read -r response
+    
+    if [[ ! "$response" =~ ^[Yy]$ ]]; then
+        log_info "Upgrade cancelled"
+        exit 0
+    fi
+    
+    download_template "$template_type" "$current_dir"
+}
+
+# Main function
+main() {
+    ensure_agent_dir
+    
+    case "${1:-}" in
+        "init")
+            case "${2:-}" in
+                "--frontend"|"--front")
+                    download_template "frontend"
+                    ;;
+                "--backend"|"--back")
+                    download_template "backend"
+                    ;;
+                "--mobile")
+                    download_template "mobile"
+                    ;;
+                "--fullstack"|"--full")
+                    download_template "fullstack"
+                    ;;
+                *)
+                    log_error "Please specify template type: --frontend, --backend, --mobile, or --fullstack"
+                    exit 1
+                    ;;
+            esac
+            ;;
+        "upgrade")
+            case "${2:-}" in
+                "--frontend"|"--front")
+                    upgrade_template "frontend"
+                    ;;
+                "--backend"|"--back")
+                    upgrade_template "backend"
+                    ;;
+                "--mobile")
+                    upgrade_template "mobile"
+                    ;;
+                "--fullstack"|"--full")
+                    upgrade_template "fullstack"
+                    ;;
+                *)
+                    log_error "Please specify template type: --frontend, --backend, --mobile, or --fullstack"
+                    exit 1
+                    ;;
+            esac
+            ;;
+        "list")
+            list_templates
+            ;;
+        "version")
+            echo "Agent CLI version $VERSION"
+            ;;
+        "help"|"--help"|"-h")
+            show_help
+            ;;
+        *)
+            log_error "Unknown command: ${1:-}"
+            echo
+            show_help
+            exit 1
+            ;;
+    esac
+}
+
+# Run main function
+main "$@"
