@@ -134,17 +134,84 @@ UI 변경이 있는 경우:
 - 보안 취약점 해결
 ```
 
-## PR 크기 가이드
+## PR 크기 가이드 / PR Size Guidelines
 
-### 이상적인 PR 크기
-- **라인 수**: 200-400줄 (최대 800줄)
-- **파일 수**: 5-10개 파일
-- **리뷰 시간**: 30분 이내
+### 이상적인 PR 크기 / Ideal PR Size
+- **라인 수 / Lines**: 200-400줄 (최대 800줄) / 200-400 lines (max 800 lines)
+- **파일 수 / Files**: 5-10개 파일 / 5-10 files
+- **리뷰 시간 / Review time**: 30분 이내 / Within 30 minutes
+- **개념 수 / Concepts**: 1-2개 핵심 개념 / 1-2 core concepts
 
-### 큰 PR을 나누는 방법
-1. **기능별 분할**: 독립적인 기능은 별도 PR로
-2. **단계별 분할**: 준비 → 구현 → 테스트 → 문서화
-3. **파일별 분할**: 관련 없는 파일 변경은 분리
+### **필수: PR 최소 단위 원칙 / Mandatory: Minimal PR Unit Principle**
+
+#### 1. 단일 책임 원칙 / Single Responsibility Principle
+- **한 PR = 하나의 완전한 기능 또는 수정사항**
+- **One PR = One complete feature or fix**
+- 여러 개념이 섞이면 반드시 분할 / Must split if multiple concepts are mixed
+
+#### 2. 필수 분할 기준 / Mandatory Split Criteria
+다음 경우 **반드시** 별도 PR로 분할해야 함:
+
+**🔴 즉시 분할 필요 / Immediate Split Required:**
+- 서로 다른 모듈/컴포넌트 변경 / Different modules/components
+- 기능 추가 + 리팩토링 혼재 / Feature addition + refactoring mixed
+- 인프라 변경 + 비즈니스 로직 변경 / Infrastructure + business logic changes
+- 의존성 추가 + 기능 구현 / Dependency addition + feature implementation
+- **feat + docs 혼재 / feat + docs mixed**
+
+**🟡 분할 검토 필요 / Split Review Required:**
+- 파일 수 > 15개 / More than 15 files
+- 라인 수 > 800줄 / More than 800 lines
+- 3개 이상의 하위 시스템 영향 / Affects 3+ subsystems
+
+#### 3. 올바른 분할 예시 / Correct Split Examples
+
+**❌ 잘못된 예 / Wrong Example:**
+```
+feat: Complete CLI implementation with all features
+- 23 files changed, 2629 insertions
+- init, list, convert, update, cache commands
+- Template management system
+- File protection mechanism
+- Configuration management
+```
+
+**✅ 올바른 예 / Correct Example:**
+```
+PR #1: feat: Add basic CLI structure and dependencies
+PR #2: feat: Implement CLI init command with template selection  
+PR #3: feat: Add template management and caching system
+PR #4: feat: Implement content conversion commands
+PR #5: feat: Add project update functionality
+```
+
+### 큰 PR을 나누는 방법 / How to Split Large PRs
+
+#### 1. 계층별 분할 / Layer-based Split
+```
+PR #1: 기초 인프라 / Basic Infrastructure
+├── 의존성 추가 / Add dependencies
+├── 기본 구조 설정 / Basic structure setup
+└── 설정 파일 / Configuration files
+
+PR #2: 핵심 기능 구현 / Core Feature Implementation  
+├── 주요 로직 / Main logic
+├── API 인터페이스 / API interfaces
+└── 기본 테스트 / Basic tests
+
+PR #3: 완성 및 문서화 / Completion and Documentation
+├── 추가 기능 / Additional features
+├── 문서 업데이트 / Documentation updates
+└── 통합 테스트 / Integration tests
+```
+
+#### 2. 타입별 분할 / Type-based Split
+```
+PR #1: docs: Update guidelines and documentation
+PR #2: feat: Add core functionality
+PR #3: test: Add comprehensive test coverage
+PR #4: refactor: Optimize performance
+```
 
 ## 코드블록 활용 가이드
 
