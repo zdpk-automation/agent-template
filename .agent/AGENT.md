@@ -10,6 +10,11 @@
 - [AI 에이전트 설정 가이드](.agent/docs/agent-config-guide.md) - AGENT.md 파일 작성 및 활용법
 - [기능 문서화 템플릿](.agent/docs/feature-documentation-template.md) - 새 기능 문서화 표준
 
+## Claude 사용자 추가 참조 문서
+현재 LLM이 Claude인 경우 다음 문서도 참조하세요:
+
+- [Gemini CLI 사용 가이드](.agent/gemini-cli-usage-guide.md) - 대용량 코드베이스 분석 시 Gemini CLI 활용법
+
 ## 프로젝트 개요
 이 저장소는 통합 AI 도구 설정 관리를 위한 템플릿 저장소입니다:
 - 여러 AI 도구 (Claude Code, Gemini CLI, OpenCode) 설정 통합 관리
@@ -51,3 +56,4 @@
 - 반드시 [기여 가이드](.agent/docs/contributing.md)의 PR 작성 규칙을 따를 것
 - 코드 변경 시 관련 문서도 함께 업데이트
 - 테스트 계획과 체크리스트를 포함할 것
+- **다국어 지원 필수**: 모든 문서, PR 내용은 반드시 '한국어(영어)' 형태로 병기할 것
