@@ -115,5 +115,8 @@ curl -sSL https://raw.githubusercontent.com/zdpk-automation/agent-template/main/
 - [기능 문서화 템플릿](.agent/docs/feature-documentation-template.md) - 새 기능 문서화 표준
 
 ## 기여하기
+새로운 도구 지원이나 템플릿 추가는 언제든 환영합니다.
+- [기여 가이드](.agent/docs/contributing.md)를 참고하여 기여해주세요.
+- [PR 작성 가이드](docs/pr-guidelines.md)를 참고하여 기여해주세요.
 
-새로운 도구 지원이나 템플릿 추가는 언제든 환영합니다. [기여 가이드](.agent/docs/contributing.md)를 참고하여 기여해주세요.
+>Basic template repository for AI tools configuration.
