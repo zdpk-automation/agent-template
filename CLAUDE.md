@@ -1,0 +1,1 @@
+templates/common/CLAUDE.md

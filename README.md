@@ -29,25 +29,36 @@
 
 ```
 agent-template/
-├── .github/                # GitHub 템플릿
-│   ├── pull_request_template.md      # 기본 PR 템플릿
-│   └── PULL_REQUEST_TEMPLATE/        # 특화 PR 템플릿들
+├── .agent/                 # 프로젝트 자체 에이전트 설정
+│   ├── AGENT.md           # 프로젝트 자체용 AI 에이전트 공통 지침
+│   └── docs/              # 프로젝트 문서
+│       ├── development-history.md    # 개발 이력
+│       ├── contributing.md          # 기여 가이드
+│       ├── agent-config-guide.md    # AI 에이전트 설정 가이드
+│       └── feature-documentation-template.md  # 기능 문서화 템플릿
+├── CLAUDE.md → templates/common/CLAUDE.md  # Claude Code 설정 (심볼릭 링크)
+├── .gemini/
+│   └── GEMINI.md → ../templates/common/GEMINI.md  # Gemini CLI 설정 (심볼릭 링크)
 ├── configs/                # 각 도구별 설정 템플릿
 │   ├── claude/             # Claude Code 설정
 │   ├── gemini/             # Gemini CLI 설정
 │   └── opencode/           # OpenCode 설정
-├── scripts/                # 초기화 및 관리 스크립트
-│   ├── init.sh            # 통합 초기화 스크립트
-│   ├── setup-pr-templates.sh  # PR 템플릿 설정 스크립트
-│   ├── setup-claude.sh    # Claude 설정 스크립트
-│   ├── setup-gemini.sh    # Gemini 설정 스크립트
-│   └── setup-opencode.sh  # OpenCode 설정 스크립트
+├── cli/                    # CLI 도구 구현
+│   ├── main.py            # CLI 메인 엔트리포인트
+│   ├── commands/          # 각 명령어 구현
+│   └── core/              # 핵심 로직
 ├── templates/              # 프로젝트별 템플릿
+│   ├── common/            # 공통 템플릿
+│   │   ├── AGENT.md       # 템플릿용 AI 에이전트 공통 지침
+│   │   ├── CLAUDE.md      # Claude Code 설정 (AGENT.md 참조만)
+│   │   ├── GEMINI.md      # Gemini CLI 설정 (AGENT.md 참조만)
+│   │   ├── CLAUDE.template.md  # Claude Code 지침 템플릿
+│   │   └── GEMINI.template.md  # Gemini CLI 지침 템플릿
 │   ├── pr-templates/      # PR 템플릿 모음
 │   ├── web-project/       # 웹 프로젝트용 설정
 │   ├── mobile-project/    # 모바일 프로젝트용 설정
 │   └── data-project/      # 데이터 프로젝트용 설정
-└── docs/                  # 문서
+└── docs/                  # 사용자 문서 (기존 문서들)
     ├── setup-guide.md     # 설정 가이드
     ├── usage-examples.md  # 사용 예제
     ├── pr-guidelines.md   # PR 작성 가이드
@@ -91,13 +102,21 @@ curl -sSL https://raw.githubusercontent.com/zdpk-automation/agent-template/main/
 
 ## 문서
 
+### 사용자 문서
 - [설정 가이드](docs/setup-guide.md) - 상세한 설치 및 설정 방법
 - [사용 예제](docs/usage-examples.md) - 실제 사용 시나리오와 예제
 - [PR 작성 가이드](docs/pr-guidelines.md) - 효과적인 PR 작성 방법
 - [PR 템플릿 사용법](docs/pr-template-usage.md) - PR 템플릿 활용 가이드
 
-## 기여하기
+### 개발자 문서
+- [개발 이력](.agent/docs/development-history.md) - 프로젝트 발전 과정과 변경사항
+- [기여 가이드](.agent/docs/contributing.md) - 프로젝트 기여 방법, 코딩 스타일, PR 과정
+- [AI 에이전트 설정 가이드](.agent/docs/agent-config-guide.md) - AGENT.md 파일 작성 및 활용법
+- [기능 문서화 템플릿](.agent/docs/feature-documentation-template.md) - 새 기능 문서화 표준
 
-새로운 도구 지원이나 템플릿 추가는 언제든 환영합니다. [PR 작성 가이드](docs/pr-guidelines.md)를 참고하여 기여해주세요.
-=======
-Basic template repository for AI tools configuration.
+## 기여하기
+새로운 도구 지원이나 템플릿 추가는 언제든 환영합니다.
+- [기여 가이드](.agent/docs/contributing.md)를 참고하여 기여해주세요.
+- [PR 작성 가이드](docs/pr-guidelines.md)를 참고하여 기여해주세요.
+
+>Basic template repository for AI tools configuration.
