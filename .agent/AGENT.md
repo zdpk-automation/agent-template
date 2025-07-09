@@ -2,6 +2,14 @@
 
 이 파일은 agent-template 저장소를 개발하고 관리할 때 AI 에이전트들이 참조하는 공통 지침입니다.
 
+## 필수 참조 문서
+작업 시작 전에 반드시 다음 문서들을 읽고 지침을 따라야 합니다:
+
+- [개발 이력](.agent/docs/development-history.md) - 프로젝트 발전 과정과 변경사항
+- [기여 가이드](.agent/docs/contributing.md) - 프로젝트 기여 방법, 코딩 스타일, PR 과정
+- [AI 에이전트 설정 가이드](.agent/docs/agent-config-guide.md) - AGENT.md 파일 작성 및 활용법
+- [기능 문서화 템플릿](.agent/docs/feature-documentation-template.md) - 새 기능 문서화 표준
+
 ## 프로젝트 개요
 이 저장소는 통합 AI 도구 설정 관리를 위한 템플릿 저장소입니다:
 - 여러 AI 도구 (Claude Code, Gemini CLI, OpenCode) 설정 통합 관리
@@ -9,9 +17,9 @@
 - PR 템플릿 시스템 및 CLI 도구 구현
 
 ## 주요 디렉토리 구조
+- `.agent/`: 프로젝트 자체 에이전트 설정 및 문서
 - `configs/`: 각 도구별 설정 템플릿
 - `templates/`: 프로젝트별 템플릿 (사용자가 복사해서 사용)
-- `docs/`: 문서 및 가이드
 - `cli/`: CLI 도구 구현
 - `templates/common/`: 공통 템플릿 파일들
 
@@ -38,3 +46,8 @@
 - 코드 생성 시 컨텍스트 유지
 - 다국어 지원 (한국어/영어) 고려
 - 보안 및 모범 사례 준수
+
+## PR 작성 시 주의사항
+- 반드시 [기여 가이드](.agent/docs/contributing.md)의 PR 작성 규칙을 따를 것
+- 코드 변경 시 관련 문서도 함께 업데이트
+- 테스트 계획과 체크리스트를 포함할 것

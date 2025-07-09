@@ -29,7 +29,13 @@
 
 ```
 agent-template/
-├── AGENT.md                # 프로젝트 자체용 AI 에이전트 공통 지침
+├── .agent/                 # 프로젝트 자체 에이전트 설정
+│   ├── AGENT.md           # 프로젝트 자체용 AI 에이전트 공통 지침
+│   └── docs/              # 프로젝트 문서
+│       ├── development-history.md    # 개발 이력
+│       ├── contributing.md          # 기여 가이드
+│       ├── agent-config-guide.md    # AI 에이전트 설정 가이드
+│       └── feature-documentation-template.md  # 기능 문서화 템플릿
 ├── CLAUDE.md → templates/common/CLAUDE.md  # Claude Code 설정 (심볼릭 링크)
 ├── .gemini/
 │   └── GEMINI.md → ../templates/common/GEMINI.md  # Gemini CLI 설정 (심볼릭 링크)
@@ -52,13 +58,11 @@ agent-template/
 │   ├── web-project/       # 웹 프로젝트용 설정
 │   ├── mobile-project/    # 모바일 프로젝트용 설정
 │   └── data-project/      # 데이터 프로젝트용 설정
-└── docs/                  # 문서
+└── docs/                  # 사용자 문서 (기존 문서들)
     ├── setup-guide.md     # 설정 가이드
     ├── usage-examples.md  # 사용 예제
     ├── pr-guidelines.md   # PR 작성 가이드
-    ├── pr-template-usage.md  # PR 템플릿 사용법
-    ├── development-history.md  # 개발 이력
-    └── agent-config-guide.md   # AI 에이전트 설정 가이드
+    └── pr-template-usage.md  # PR 템플릿 사용법
 ```
 
 ## 빠른 시작
@@ -98,13 +102,18 @@ curl -sSL https://raw.githubusercontent.com/zdpk-automation/agent-template/main/
 
 ## 문서
 
+### 사용자 문서
 - [설정 가이드](docs/setup-guide.md) - 상세한 설치 및 설정 방법
 - [사용 예제](docs/usage-examples.md) - 실제 사용 시나리오와 예제
 - [PR 작성 가이드](docs/pr-guidelines.md) - 효과적인 PR 작성 방법
 - [PR 템플릿 사용법](docs/pr-template-usage.md) - PR 템플릿 활용 가이드
-- [개발 이력](docs/development-history.md) - 프로젝트 발전 과정과 변경사항
-- [AI 에이전트 설정 가이드](docs/agent-config-guide.md) - AGENT.md 파일 작성 및 활용법
+
+### 개발자 문서
+- [개발 이력](.agent/docs/development-history.md) - 프로젝트 발전 과정과 변경사항
+- [기여 가이드](.agent/docs/contributing.md) - 프로젝트 기여 방법, 코딩 스타일, PR 과정
+- [AI 에이전트 설정 가이드](.agent/docs/agent-config-guide.md) - AGENT.md 파일 작성 및 활용법
+- [기능 문서화 템플릿](.agent/docs/feature-documentation-template.md) - 새 기능 문서화 표준
 
 ## 기여하기
 
-새로운 도구 지원이나 템플릿 추가는 언제든 환영합니다. [PR 작성 가이드](docs/pr-guidelines.md)를 참고하여 기여해주세요.
+새로운 도구 지원이나 템플릿 추가는 언제든 환영합니다. [기여 가이드](.agent/docs/contributing.md)를 참고하여 기여해주세요.
