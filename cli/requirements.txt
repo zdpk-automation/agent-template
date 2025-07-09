@@ -1,0 +1,3 @@
+# CLI Dependencies / CLI 의존성
+typer>=0.9.0  # Modern CLI framework / 현대적 CLI 프레임워크
+rich>=13.0.0  # Terminal formatting / 터미널 포맷팅
