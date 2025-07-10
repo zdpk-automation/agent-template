@@ -12,9 +12,9 @@ This project aims to develop a CLI tool that enables quick creation and manageme
 
 ## 지원하는 도구들 (Supported Tools)
 
-- **Claude Code**: Anthropic의 공식 CLI 도구
+- **Claude Code**: Anthropic의 공식 CLI 도구 (커스텀 명령어 지원)
 - **Gemini CLI**: Google의 Gemini AI CLI 도구  
-- **Agent Template CLI**: 개발 중인 템플릿 관리 CLI 도구 (Python + Typer)
+- **Agent Template Commands**: Claude Code 기반 템플릿 관리 커스텀 명령어
 
 ## 주요 기능 (Key Features)
 
@@ -28,12 +28,11 @@ This project aims to develop a CLI tool that enables quick creation and manageme
 - 프로젝트 유형별 최적화된 템플릿 제공
 - 심볼릭 링크 + 캐시 방식 파일 보호 메커니즘
 
-### 🚀 CLI 도구 (CLI Tool - In Development)
-- `init`: 프로젝트 초기화
-- `convert`: 콘텐츠 플랫폼 간 변환
-- `list`: 템플릿 목록 조회
-- `update`: 템플릿 업데이트
-- `config`: 설정 관리
+### 🚀 Claude Code 커스텀 명령어 (Claude Code Custom Commands)
+- `/init-template`: 템플릿으로 새 프로젝트 초기화
+- `/list-templates`: 사용 가능한 템플릿 목록 조회
+- `/upgrade-template`: 기존 템플릿을 최신 버전으로 업그레이드
+- `/template-cache`: 템플릿 캐시 관리 (정보 조회, 업데이트, 삭제)
 
 ### 📋 콘텐츠 변환 (Content Conversion)
 - YouTube, Instagram, X/Twitter, Threads 간 콘텐츠 변환
@@ -55,43 +54,31 @@ agent-template/
 │   ├── prd/               # PRD 문서
 │   │   └── 2025-07-09-cli-tool.md  # CLI 도구 PRD
 │   └── gemini-cli-usage-guide.md   # Gemini CLI 사용 가이드
+├── .claude/               # Claude Code 설정
+│   └── commands/          # Claude Code 커스텀 명령어
+│       ├── init-template.md      # 템플릿 초기화 명령어
+│       ├── list-templates.md     # 템플릿 목록 명령어
+│       ├── upgrade-template.md   # 템플릿 업그레이드 명령어
+│       └── template-cache.md     # 템플릿 캐시 관리 명령어
 ├── CLAUDE.md → templates/common/CLAUDE.md  # Claude Code 설정 (심볼릭 링크)
 ├── .gemini/
 │   └── GEMINI.md → ../templates/common/GEMINI.md  # Gemini CLI 설정 (심볼릭 링크)
-├── cli/                    # CLI 도구 구현 (개발 예정)
-│   ├── main.py            # CLI 메인 엔트리포인트
-│   ├── commands/          # 각 명령어 구현
-│   │   ├── init.py        # 초기화 명령어
-│   │   ├── convert.py     # 변환 명령어
-│   │   ├── list.py        # 목록 명령어
-│   │   ├── update.py      # 업데이트 명령어
-│   │   └── config.py      # 설정 명령어
-│   ├── core/              # 핵심 로직
-│   │   ├── template_manager.py     # 템플릿 관리
-│   │   ├── project_generator.py   # 프로젝트 생성
-│   │   ├── content_converter.py   # 콘텐츠 변환
-│   │   └── version_manager.py     # 버전 관리
-│   └── utils/             # 유틸리티
 ├── templates/              # 프로젝트별 템플릿
 │   ├── common/            # 공통 템플릿
 │   │   ├── AGENT.md       # 템플릿용 AI 에이전트 공통 지침
 │   │   ├── CLAUDE.md      # Claude Code 설정 (AGENT.md 참조만)
 │   │   ├── GEMINI.md      # Gemini CLI 설정 (AGENT.md 참조만)
 │   │   └── FIXED_GUIDE.md # 고정 가이드
-│   ├── development/       # 개발 템플릿 (계획됨)
-│   │   ├── backend/       # 백엔드 템플릿
-│   │   ├── frontend/      # 프론트엔드 템플릿
-│   │   └── cli/          # CLI 도구 템플릿
-│   ├── content/          # 콘텐츠 템플릿 (계획됨)
-│   │   ├── blog/         # 블로그 템플릿
-│   │   └── social/       # 소셜 미디어 템플릿
-│   └── learning/         # 학습 템플릿 (계획됨)
+│   ├── backend/           # 백엔드 템플릿
+│   ├── frontend/          # 프론트엔드 템플릿
+│   ├── mobile/            # 모바일 템플릿
+│   ├── fullstack/         # 풀스택 템플릿
+│   └── cli/              # CLI 도구 템플릿
 └── example/              # CLI 명령어 사용 예시
     ├── init/             # `init` 명령어 예시
     ├── convert/          # `convert` 명령어 예시
     ├── list/             # `list` 명령어 예시
-    ├── update/           # `update` 명령어 예시
-    └── config/           # `config` 명령어 예시
+    └── update/           # `update` 명령어 예시
 ```
 
 ## 개발 로드맵 (Development Roadmap)
@@ -99,14 +86,14 @@ agent-template/
 ### Phase 1 (2025 Q3) - 핵심 기능 구현
 - [x] PRD 작성 및 기술 설계
 - [x] 의사결정 기록 및 아키텍처 문서화
-- [ ] 핵심 명령어 구현 (`init`, `list`, `update`)
-- [ ] 기본 템플릿 제공
-- [ ] 파일 보호 메커니즘 구현
+- [x] Claude Code 커스텀 명령어 구현
+- [x] 기본 템플릿 제공
+- [x] 파일 보호 메커니즘 구현
 
 ### Phase 2 (2025 Q4) - 확장 기능
-- [ ] 콘텐츠 변환 기능 추가 (`convert`)
+- [ ] 콘텐츠 변환 기능 추가 (Claude Code 명령어)
 - [ ] 더 많은 템플릿 지원
-- [ ] 사용자 설정 관리 (`config`)
+- [ ] 고급 템플릿 설정 관리
 - [ ] 테스트 및 문서화 완료
 
 ### Phase 3 (2026 Q1) - 고급 기능
@@ -116,9 +103,25 @@ agent-template/
 
 ## 빠른 시작 (Quick Start)
 
-### 현재 사용 가능한 기능
+### Claude Code 커스텀 명령어 사용법
 ```bash
-# 현재 프로젝트에서 AI 도구 설정 참조
+# 템플릿 목록 조회
+/list-templates
+
+# 새 프로젝트 초기화
+/init-template frontend my-react-app
+/init-template backend my-api-server
+
+# 기존 프로젝트 템플릿 업그레이드
+/upgrade-template frontend
+
+# 템플릿 캐시 관리
+/template-cache info
+/template-cache update
+```
+
+### AI 도구 설정 참조
+```bash
 # Claude Code 사용 시
 cat CLAUDE.md
 
@@ -127,24 +130,6 @@ cat .gemini/GEMINI.md
 
 # CLI 명령어 사용 예시 확인
 ls example/
-```
-
-### CLI 도구 사용 (개발 예정)
-```bash
-# 프로젝트 초기화
-agent-template init
-
-# 템플릿 목록 조회
-agent-template list
-
-# 콘텐츠 변환
-agent-template convert blog-post.md youtube,instagram
-
-# 템플릿 업데이트
-agent-template update
-
-# 설정 관리
-agent-template config
 ```
 
 ## 문서 (Documentation)
